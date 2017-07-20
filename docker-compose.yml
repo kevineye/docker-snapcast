@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  
+  snapserver:
+    image: kevineye/snapcast
+    build: .
+    volumes:
+      - spotify-share:/data/spotify
+    ports:
+      - "1704:1704"
+      - "1705:1705"
+    command: snapserver -s pipe:///data/spotify/fifo?name=Spotify&sampleformat=44100:16:2
+    
+  spotify:
+    image: kevineye/librespot
+    build: ../docker-librespot
+    volumes:
+      - spotify-share:/data
+    environment:
+      name: Snapserver
+      user:
+      password:
+
+volumes:
+  spotify-share:
