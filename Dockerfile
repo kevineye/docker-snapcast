@@ -4,7 +4,7 @@ WORKDIR /data
 
 RUN apk -U add git bash build-base asio-dev avahi-dev flac-dev libvorbis-dev alsa-lib-dev \
  && cd /root \
- && git clone --recursive https://github.com/badaix/snapcast.git \
+ && git clone --recursive --branch v0.11.1 https://github.com/badaix/snapcast.git \
  && cd snapcast \
  && make \
  && cp server/snapserver client/snapclient /usr/local/bin \
