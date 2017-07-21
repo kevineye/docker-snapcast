@@ -14,13 +14,12 @@ services:
     
   spotify:
     image: kevineye/librespot
-    build: ../docker-librespot
     volumes:
       - spotify-share:/data
     environment:
-      name: Snapserver
-      user:
-      password:
+      SPOTIFY_NAME: Snapserver
+      SPOTIFY_USER:     # set here or in .env file
+      SPOTIFY_PASSWORD: # set here or in .env file
 
 volumes:
   spotify-share:
