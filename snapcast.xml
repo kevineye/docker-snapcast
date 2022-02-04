@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>DareDoesSnapcast</Name>
+  <Repository>daredoes/snapcast</Repository>
+  <Registry>https://hub.docker.com/r/daredoes/snapcast</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project>https://hub.docker.com/r/daredoes/snapcast</Project>
+  <Overview>The config can be edited while the docker container is running in `/etc/snapserver.conf`&#xD;
+&#xD;
+use this Audio option in  mopidy.conf in mopidy docker to use Snapcast:&#xD;
+&#xD;
+[audio]&#xD;
+output = audioresample ! audio/x-raw,rate=48000,channels=2,format=S16LE ! audioconvert ! wavenc ! filesink location=/tmp/snapfifo</Overview>
+  <Category>MediaServer:Music</Category>
+  <WebUI>http://[IP]:[PORT:1780]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/maschhoff/docker/master/unraid%20xml/my-Snapcast.xml</TemplateURL>
+  <Icon>http://icons.iconarchive.com/icons/alecive/flatwoken/512/Apps-Player-Audio-icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs>snapserver</PostArgs>
+  <CPUset/>
+  <DateInstalled>1643967351</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description>The config can be edited while the docker container is running in `/etc/snapserver.conf`&#xD;
+&#xD;
+use this Audio option in  mopidy.conf in mopidy docker to use Snapcast:&#xD;
+&#xD;
+[audio]&#xD;
+output = audioresample ! audio/x-raw,rate=48000,channels=2,format=S16LE ! audioconvert ! wavenc ! filesink location=/tmp/snapfifo</Description>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish>
+      <Port>
+        <HostPort>1780</HostPort>
+        <ContainerPort>1780</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>1705</HostPort>
+        <ContainerPort>1705</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>1704</HostPort>
+        <ContainerPort>1704</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/tmp/snapcast</HostDir>
+      <ContainerDir>/data/</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment/>
+  <Labels/>
+  <Config Name="Host Path 1" Target="/data/" Default="" Mode="rw" Description="Container Path: /data/" Type="Path" Display="always" Required="false" Mask="false">/tmp/snapcast</Config>
+  <Config Name="Web" Target="1780" Default="1780" Mode="tcp" Description="Container Port: 1780" Type="Port" Display="always" Required="true" Mask="false">1780</Config>
+  <Config Name="Control" Target="1705" Default="1705" Mode="tcp" Description="This is the port for control of the snapcast server" Type="Port" Display="advanced" Required="true" Mask="false">1705</Config>
+  <Config Name="Player" Target="1704" Default="1704" Mode="tcp" Description="This is the port for the player of Snapcast" Type="Port" Display="advanced" Required="true" Mask="false">1704</Config>
+</Container>
