@@ -3,7 +3,7 @@ version: "2"
 services:
   
   snapserver:
-    image: kevineye/snapcast
+    image: daredoes/snapcast
     build: .
     volumes:
       - spotify-share:/data/spotify
