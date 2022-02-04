@@ -10,6 +10,7 @@ services:
     ports:
       - "1704:1704"
       - "1705:1705"
+      - "1780:1780"
     command: snapserver -s pipe:///data/spotify/fifo?name=Spotify&sampleformat=44100:16:2
     
   spotify:
