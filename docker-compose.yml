@@ -14,7 +14,7 @@ services:
     command: snapserver -s pipe:///data/spotify/fifo?name=Spotify&sampleformat=44100:16:2
     
   spotify:
-    image: kevineye/librespot
+    image: daredoes/librespot
     volumes:
       - spotify-share:/data
     environment:
