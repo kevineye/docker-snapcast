@@ -14,7 +14,7 @@ run:
     -p 5004:5004 \
     -p 5005:5005 \
     --privileged \
-    -v /var/run/dbus:/var/run/dbus \
+    -v /Users/dare/Git/docker-snapcast/config:/config \
     $(DOCKER_REPO)/$(DOCKER_IMAGE)
 
 

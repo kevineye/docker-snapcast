@@ -5,8 +5,10 @@ if test -f "$FILE"; then
     cp $FILE /etc/snapserver.conf
 fi
 
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 # nqptp &
 # rc-service dbus start
-# rc-service avahi-daemon start
+dbus-daemon --system
+avahi-daemon &
 # rc-service shairport-sync zap
 snapserver

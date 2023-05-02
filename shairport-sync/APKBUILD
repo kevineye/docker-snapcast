@@ -34,7 +34,8 @@ build() {
 		--with-avahi \
 		--with-ssl=openssl \
 		--with-soxr \
-    --with-metadata
+    --with-metadata \
+    --with-stdout
 	make
 }
 
