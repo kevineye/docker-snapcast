@@ -4,7 +4,9 @@ if test -f "$FILE"; then
     echo "$FILE exists, copying to config folder."
     cp $FILE /etc/snapserver.conf
 fi
-nqptp &
-rc-service dbus start
-rc-service avahi-daemon start
+
+# nqptp &
+# rc-service dbus start
+# rc-service avahi-daemon start
+# rc-service shairport-sync zap
 snapserver
