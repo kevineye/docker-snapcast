@@ -9,7 +9,7 @@ arch="all"
 license="custom"
 depends="avahi"
 makedepends="autoconf automake libtool alsa-lib-dev popt-dev
-	openssl-dev>3 soxr-dev avahi-dev libconfig-dev xmltoman"
+	openssl-dev soxr-dev avahi-dev libconfig-dev xmltoman"
 subpackages="$pkgname-doc $pkgname-openrc"
 source="$pkgname-$pkgver.tar.gz::https://github.com/mikebrady/shairport-sync/archive/$pkgver.tar.gz
 	$pkgname.initd"
@@ -36,6 +36,7 @@ build() {
 		--with-soxr \
     --with-metadata \
     --with-mqtt-client \
+    --with-airplay-2 \
     --with-stdout
 	make
 }

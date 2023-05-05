@@ -13,7 +13,7 @@ COPY --from=nqptp_builder /src/nqptp/nqptp /usr/local/bin/nqptp
 
 # Install the minimum dependencies required to run the nqptp binary
 RUN apk add --no-cache \
-    libstdc++ mosquitto-dev
+    libstdc++ mosquitto-dev libtool alsa-lib-dev popt-dev openssl-dev soxr-dev avahi-dev libplist-dev ffmpeg-dev libsodium-dev libgcrypt-dev xxd
 
 
 RUN adduser -D myuser abuild
@@ -44,7 +44,7 @@ COPY --from=builder /src/shairport/shairport-sync /usr/local/bin/shairport-sync
 RUN apk add --no-cache \
     libstdc++
 
-RUN apk add --no-cache libconfig-dev popt-dev mosquitto-dev
+RUN apk add --no-cache libconfig-dev popt-dev mosquitto-dev libtool alsa-lib-dev popt-dev openssl-dev soxr-dev avahi-dev libplist-dev ffmpeg-dev libsodium-dev libgcrypt-dev xxd
 
 WORKDIR /data
 WORKDIR /config
@@ -61,6 +61,8 @@ RUN apk add --no-cache librespot --repository=http://dl-cdn.alpinelinux.org/alpi
 RUN apk add -u snapcast
 
 RUN apk add dbus
+RUN apk add python3 py3-pip
+RUN pip install websockets websocket-client
 
 COPY ./config/snapserver.conf /etc
 COPY ./snapweb/dist/* /usr/share/snapserver/snapweb/
@@ -68,4 +70,4 @@ COPY ./start.sh /
 RUN chmod +x /start.sh
 RUN export DBUS_SESSION_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
-ENTRYPOINT [ "/start.sh" ]
+ENTRYPOINT ["/start.sh" ]

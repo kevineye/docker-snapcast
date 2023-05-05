@@ -8,7 +8,8 @@ fi
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 # nqptp &
 # rc-service dbus start
-dbus-daemon --system
+dbus-daemon --session &
 avahi-daemon &
+nqptp &
 # rc-service shairport-sync zap
 snapserver
