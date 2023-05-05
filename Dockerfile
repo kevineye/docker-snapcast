@@ -1,5 +1,19 @@
+FROM alpine:edge AS nqptp_builder
+
+WORKDIR /src/nqptp
+
+RUN apk add autoconf automake build-base linux-headers git && git clone https://github.com/mikebrady/nqptp.git /src/nqptp &&  cd /src/nqptp &&  autoreconf -fi &&  ./configure --with-systemd-startup && make && make install && rm -rf nqptp && apk del autoconf automake build-base linux-headers git
+
+RUN cp $(which nqptp) /src/nqptp/nqptp
+
 FROM alpine:edge as builder
-RUN apk add autoconf automake build-base linux-headers git && git clone https://github.com/mikebrady/nqptp.git &&  cd nqptp &&  autoreconf -fi &&  ./configure --with-systemd-startup && make && make install && rm -rf nqptp && apk del autoconf automake build-base linux-headers git
+WORKDIR /src/shairport
+# Copy the nqptp binary from the previous stage
+COPY --from=nqptp_builder /src/nqptp/nqptp /usr/local/bin/nqptp
+
+# Install the minimum dependencies required to run the nqptp binary
+RUN apk add --no-cache \
+    libstdc++
 
 RUN adduser -D myuser abuild
 RUN adduser myuser abuild
@@ -17,8 +31,19 @@ USER root
 RUN apk del alpine-sdk
 RUN apk add /home/myuser/packages/myuser/x86_64/*.apk --allow-untrusted 
 
-FROM builder
+RUN cp $(which shairport-sync) /src/shairport/shairport-sync
 
+FROM alpine:edge
+
+# Copy the nqptp binary from the previous stage
+COPY --from=nqptp_builder /src/nqptp/nqptp /usr/local/bin/nqptp
+COPY --from=builder /src/shairport/shairport-sync /usr/local/bin/shairport-sync
+
+# Install the minimum dependencies required to run the nqptp binary
+RUN apk add --no-cache \
+    libstdc++
+
+RUN apk add --no-cache libconfig-dev popt-dev
 
 WORKDIR /data
 WORKDIR /config
