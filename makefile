@@ -16,6 +16,8 @@ run:
     -p 5005:5005 \
     --privileged \
     -v /Users/dare/Git/docker-snapcast/config:/config \
+    -v /Users/dare/Git/docker-snapcast/config:/config \
+		-v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket \
     $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME)
 
 
