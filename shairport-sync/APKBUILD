@@ -35,6 +35,7 @@ build() {
 		--with-ssl=openssl \
 		--with-soxr \
     --with-metadata \
+    --with-mqtt-client \
     --with-stdout
 	make
 }

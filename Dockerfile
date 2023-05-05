@@ -13,7 +13,8 @@ COPY --from=nqptp_builder /src/nqptp/nqptp /usr/local/bin/nqptp
 
 # Install the minimum dependencies required to run the nqptp binary
 RUN apk add --no-cache \
-    libstdc++
+    libstdc++ mosquitto-dev
+
 
 RUN adduser -D myuser abuild
 RUN adduser myuser abuild
@@ -39,11 +40,11 @@ FROM alpine:edge
 COPY --from=nqptp_builder /src/nqptp/nqptp /usr/local/bin/nqptp
 COPY --from=builder /src/shairport/shairport-sync /usr/local/bin/shairport-sync
 
-# Install the minimum dependencies required to run the nqptp binary
+# Install the minimum dependencies required to run the nqptp and shairport binaries
 RUN apk add --no-cache \
     libstdc++
 
-RUN apk add --no-cache libconfig-dev popt-dev
+RUN apk add --no-cache libconfig-dev popt-dev mosquitto-dev
 
 WORKDIR /data
 WORKDIR /config
@@ -52,18 +53,12 @@ EXPOSE 1704
 EXPOSE 1705
 EXPOSE 1780
 
-# COPY --from=builder /usr/local/bin/nqptp /usr/local/bin/nqptp
-# COPY --from=builder /usr/bin/shairport-sync /usr/bin/shairport-sync
-
 
 RUN apk add --no-cache avahi
 
  
 RUN apk add --no-cache librespot --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
-# RUN apk add --no-cache shairport-sync --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 RUN apk add -u snapcast
-# # Need to run `sh /start.sh` on server start manually
-# RUN apk add  libplist-dev libsodium-dev libgcrypt-dev ffmpeg-libavutil
 
 RUN apk add dbus
 
