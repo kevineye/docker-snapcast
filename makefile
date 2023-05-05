@@ -3,7 +3,6 @@ DOCKER_REPO=daredoes
 TAG_NAME=develop
 
 run:
-	# docker image rm $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME)
 	docker run -d \
     -p 1780:1780 \
     -p 1705:1705 \
@@ -16,13 +15,11 @@ run:
     -p 5005:5005 \
     --privileged \
     -v /Users/dare/Git/docker-snapcast/config:/config \
-    -v /Users/dare/Git/docker-snapcast/config:/config \
-		-v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket \
-    $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME)
+    $(DOCKER_REPO)/$(DOCKER_IMAGE)
 
 
 build:
-	docker build --platform=linux/amd64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME) .
+	docker build --platform=linux/amd64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE) .
 	# docker build --platform=linux/arm64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE) .
 
 push:
