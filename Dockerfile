@@ -68,6 +68,6 @@ COPY ./config/snapserver.conf /etc
 COPY ./snapweb/dist/* /usr/share/snapserver/snapweb/
 COPY ./start.sh /
 RUN chmod +x /start.sh
-RUN export DBUS_SESSION_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+RUN export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
 
 ENTRYPOINT ["/start.sh" ]

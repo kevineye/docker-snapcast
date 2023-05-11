@@ -1,6 +1,6 @@
 DOCKER_IMAGE=snapcast
 DOCKER_REPO=daredoes
-TAG_NAME=develop
+TAG_NAME=stable
 
 run:
 	docker run -d \
