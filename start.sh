@@ -5,10 +5,12 @@ if test -f "$FILE"; then
     cp $FILE /etc/snapserver.conf
 fi
 
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
 # nqptp &
 # rc-service dbus start
-dbus-daemon --session &
+
+export DBUS_SYSTEM_BUS_ADDRESS=`dbus-daemon --fork --config-file=/usr/share/dbus-1/session.conf --print-address`
+# export DBUS_SYSTEM_BUS_ADDRESS=`dbus-daemon --system --nofork --nopidfile --print-address`
 avahi-daemon &
 nqptp &
 # rc-service shairport-sync zap
