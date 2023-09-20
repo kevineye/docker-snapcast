@@ -1,74 +1,150 @@
-FROM alpine:edge AS nqptp_builder
+FROM alpine:3.17 AS builder
 
-WORKDIR /src/nqptp
+# Check required arguments exist. These will be provided by the Github Action
+# Workflow and are required to ensure the correct branches are being used.
+ARG SHAIRPORT_SYNC_BRANCH
+RUN test -n "$SHAIRPORT_SYNC_BRANCH"
+ARG SNAPCAST_BRANCH
+RUN test -n "$SNAPCAST_BRANCH"
+ARG NQPTP_BRANCH
+RUN test -n "$NQPTP_BRANCH"
 
-RUN apk add --no-cache autoconf automake build-base linux-headers git && \
-    git clone https://github.com/mikebrady/nqptp.git /src/nqptp && \
-    cd /src/nqptp && \
-    autoreconf -fi && \
-    ./configure --with-systemd-startup && \
-    make && \
-    make install && \
-    cp $(which nqptp) /home/nqptp && \
-    apk del autoconf automake build-base linux-headers git && \
-    rm -rf /src/nqptp
+RUN apk -U add \
+        alsa-lib-dev \
+        autoconf \
+        automake \
+        avahi-dev \
+        build-base \
+        dbus \
+        ffmpeg-dev \
+        git \
+        libconfig-dev \
+        libgcrypt-dev \
+        libplist-dev \
+        libressl-dev \
+        libsndfile-dev \
+        libsodium-dev \
+        libtool \
+        mosquitto-dev \
+        popt-dev \
+        pulseaudio-dev \
+        soxr-dev \
+        xxd
 
-FROM alpine:edge as builder
-WORKDIR /src/shairport
-# Copy the nqptp binary from the previous stage
-COPY --from=nqptp_builder /home/nqptp /usr/local/bin/nqptp
+##### ALAC #####
+RUN git clone https://github.com/mikebrady/alac
+WORKDIR /alac
+RUN autoreconf -i
+RUN ./configure
+RUN make
+RUN make install
+WORKDIR /
+##### ALAC END #####
 
-# Install the minimum dependencies required to run the nqptp binary
-RUN apk add --no-cache \
-    libstdc++ mosquitto-dev libtool alsa-lib-dev popt-dev openssl-dev soxr-dev avahi-dev libplist-dev ffmpeg-dev libsodium-dev libgcrypt-dev xxd
+##### NQPTP #####
+RUN git clone https://github.com/mikebrady/nqptp
+WORKDIR /nqptp
+RUN git checkout "$NQPTP_BRANCH"
+RUN autoreconf -i
+RUN ./configure
+RUN make
+WORKDIR /
+##### NQPTP END #####
 
+##### SPS #####
+RUN git clone https://github.com/mikebrady/shairport-sync
+WORKDIR /shairport-sync
+RUN git checkout "$SHAIRPORT_SYNC_BRANCH"
+WORKDIR /shairport-sync/build
+RUN autoreconf -i ../
+RUN ../configure --sysconfdir=/etc --with-avahi --with-ssl=openssl --with-metadata --with-stdout
+RUN make -j $(nproc)
+RUN DESTDIR=install make install
+WORKDIR /
+##### SPS END #####
 
-RUN adduser -D myuser abuild
-RUN adduser myuser abuild
-RUN apk add alpine-sdk
-USER myuser
-RUN mkdir ~/shairport-sync
-COPY ./shairport-sync/APKBUILD /home/myuser/shairport-sync/APKBUILD
-COPY ./shairport-sync/shairport-sync.initd /home/myuser/shairport-sync/shairport-sync.initd
-RUN cd ~/shairport-sync && abuild-keygen -a -n
-USER root
-RUN cp /home/myuser/.abuild/* /etc/apk/keys/
-USER myuser
-RUN cd ~/shairport-sync && abuild -r
-USER root
-RUN apk del alpine-sdk
-RUN apk add /home/myuser/packages/myuser/x86_64/*.apk --allow-untrusted 
+##### Snapcast #####
+RUN apk add cmake boost-dev
+RUN git clone https://github.com/badaix/snapcast
+WORKDIR /snapcast
+RUN git checkout "$SNAPCAST_BRANCH"
+RUN mkdir build && cd build && cmake .. -DBUILD_CLIENT=ON -DBUILD_SERVER=ON -DBUILD_WITH_PULSE=OFF &&  cmake --build .
+WORKDIR /
+##### Snapcast End #####
 
-RUN cp $(which shairport-sync) /src/shairport/shairport-sync
+# Shairport Sync Runtime System
+FROM crazymax/alpine-s6:3.17-3.1.1.2
 
-FROM alpine:edge
+ENV S6_CMD_WAIT_FOR_SERVICES=1
+ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
 
-# Copy the nqptp binary from the previous stage
-COPY --from=nqptp_builder /home/nqptp /usr/local/bin/nqptp
-COPY --from=builder /src/shairport/shairport-sync /usr/local/bin/shairport-sync
+RUN apk -U add \
+        alsa-lib \
+        # avahi \
+        # avahi-compat-libdns_sd \
+        # avahi-dev \
+        avahi-tools \
+        dbus \
+        ffmpeg \
+        glib \
+        less \
+        less-doc \
+        libconfig \
+        libgcrypt \
+        libplist \
+        libpulse \
+        libressl3.6-libcrypto \
+        libsndfile \
+        libsodium \
+        libuuid \
+        man-pages \
+        mandoc \
+        mosquitto \
+        popt \
+        soxr
 
-# Install the minimum dependencies required to run the nqptp and shairport binaries
+# Copy build files.
+COPY --from=builder /shairport-sync/build/install/usr/local/bin/shairport-sync /usr/local/bin/shairport-sync
+COPY --from=builder /snapcast/bin/snapclient /usr/local/bin/snapclient
+COPY --from=builder /snapcast/bin/snapserver /usr/local/bin/snapserver
+COPY --from=builder /shairport-sync/build/install/usr/local/share/man/man7 /usr/share/man/man7
+COPY --from=builder /nqptp/nqptp /usr/local/bin/nqptp
+COPY --from=builder /usr/local/lib/libalac.* /usr/local/lib/
+COPY --from=builder /shairport-sync/build/install/etc/shairport-sync.conf /etc/
+COPY --from=builder /shairport-sync/build/install/etc/shairport-sync.conf.sample /etc/
+# COPY --from=builder /shairport-sync/build/install/etc/dbus-1/system.d/shairport-sync-dbus.conf /etc/dbus-1/system.d/
+# COPY --from=builder /shairport-sync/build/install/etc/dbus-1/system.d/shairport-sync-mpris.conf /etc/dbus-1/system.d/
 
-RUN apk add --no-cache libstdc++ libconfig-dev popt-dev mosquitto-dev libtool alsa-lib-dev popt-dev openssl-dev soxr-dev avahi-dev libplist-dev ffmpeg-dev libsodium-dev libgcrypt-dev xxd avahi dbus python3 py3-pip librespot --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ snapcast && \
-    pip install websockets websocket-client
+# Create non-root user for running the container -- running as the user 'shairport-sync' also allows
+# Shairport Sync to provide the D-Bus and MPRIS interfaces within the container
 
-WORKDIR /data
+RUN addgroup shairport-sync
+RUN adduser -D shairport-sync -G shairport-sync
 
+# Add the shairport-sync user to the pre-existing audio group, which has ID 29, for access to the ALSA stuff
+RUN addgroup -g 29 docker_audio && addgroup shairport-sync docker_audio && addgroup shairport-sync audio
+
+# Remove anything we don't need.
+RUN rm -rf /lib/apk/db/*
+
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ librespot
+
+# Add run script that will start SPS
 COPY ./config/snapserver.conf /etc
-COPY ./snapweb/dist/* /usr/share/snapserver/snapweb/
+COPY ./avahi-daemon.conf /etc/avahi
+ADD ./cc_snapweb/build /usr/share/snapserver/snapweb/
+
 COPY ./start.sh /
 
 RUN chmod +x /start.sh
-
-# Create necessary directories and set permissions
-RUN mkdir -p /var/run/dbus/system_bus_socket && chown root:root /var/run/dbus/system_bus_socket
-
-# Make sure the D-Bus daemon's system bus configuration file exists
-RUN mkdir -p /etc/dbus-1/system.d
-RUN sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf
 
 RUN echo "snapcast" > /etc/hostname
 
 ENTRYPOINT ["/start.sh" ]
 
 EXPOSE 1704 1705 1780
+
+
+
+# WORKDIR /data
+

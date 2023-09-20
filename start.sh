@@ -6,12 +6,21 @@ if test -f "$FILE"; then
 fi
 
 
+
 # nqptp &
 # rc-service dbus start
 
-export DBUS_SYSTEM_BUS_ADDRESS=`dbus-daemon --fork --config-file=/usr/share/dbus-1/session.conf --print-address`
-# export DBUS_SYSTEM_BUS_ADDRESS=`dbus-daemon --system --nofork --nopidfile --print-address`
+# export DBUS_SYSTEM_BUS_ADDRESS=`dbus-daemon --fork --config-file=/usr/share/dbus-1/session.conf --print-address`
+# export DBUS_SYSTEM_BUS_ADDRESS=``
+
+dbus-daemon --system --nofork --nopidfile --print-address &
 avahi-daemon &
+
+while [ ! -f /var/run/avahi-daemon/pid ]; do
+  echo "Warning: avahi is not running, sleeping for 1 second before trying to start snapcast"
+  sleep 1
+done
 nqptp &
+
 # rc-service shairport-sync zap
 snapserver

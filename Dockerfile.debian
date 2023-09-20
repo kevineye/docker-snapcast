@@ -1,5 +1,8 @@
 FROM debian:buster-slim as builder
 COPY ./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb
+RUN apt-get install build-essential cmake git
+RUN git clone https://github.com/badaix/snapcast.git
+RUN apt-get install libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev
 RUN apt-get update && apt-get install -y curl 
 
 RUN apt-get install -y autoconf libpopt-dev libconfig-dev libssl-dev build-essential libavahi-client-dev /snapserver_amd64.deb \

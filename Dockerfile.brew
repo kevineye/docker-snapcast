@@ -1,0 +1,18 @@
+FROM homebrew/brew
+
+RUN brew install snapcast
+
+WORKDIR /data
+
+COPY ./config/snapserver.conf /etc
+ADD ./daredoessnapweb/dist /usr/share/snapserver/snapweb/
+
+COPY ./start.sh /
+
+# RUN chmod +x /start.sh
+
+RUN echo "snapcast" > /etc/hostname
+
+ENTRYPOINT ["/start.sh" ]
+
+EXPOSE 1704 1705 1780
