@@ -1,5 +1,5 @@
 FROM rust:slim-bullseye as builder
-RUN apt-get update && apt-get install -y curl build-essential cmake git nodejs npm
+RUN apt-get update && apt-get install -y curl build-essential cmake git
 RUN git clone https://github.com/badaix/snapcast.git
 RUN apt-get install -y libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev
 COPY ./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb
@@ -21,19 +21,7 @@ RUN apt-get install -y autoconf libpopt-dev libconfig-dev libssl-dev build-essen
 
 RUN update-rc.d shairport-sync remove || true
 
-## Build Snapweb Client
-RUN npm install --global yarn
-WORKDIR /
-RUN export NVM_DIR="$HOME/.nvm"
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
-RUN echo "[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh" >> $HOME/.bashrc;
-RUN git clone https://github.com/daredoes/snapweb
-WORKDIR /snapweb
-RUN git checkout vite
-RUN bash -i -c 'nvm install && nvm use && yarn && yarn build'
-
 # Build and install librespot
-WORKDIR /
 RUN git clone https://github.com/librespot-org/librespot.git
 RUN cd librespot && cargo build --release
 RUN cp /librespot/target/release/librespot /usr/local/bin/
@@ -42,11 +30,21 @@ FROM debian:bullseye-slim
 
 # Install Python dependencies including pip and websockets
 RUN apt-get update
-RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-pip curl git nodejs npm nano
 RUN python3 -m pip install websockets websocket-client
 RUN apt-get install -y libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev libpopt-dev libconfig-dev libssl-dev build-essential 
 COPY ./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb
 RUN apt-get install -y /snapserver_amd64.deb
+
+RUN npm install --global yarn
+RUN export NVM_DIR="$HOME/.nvm"
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
+RUN echo "[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh" >> $HOME/.bashrc;
+RUN git clone https://github.com/daredoes/snapweb
+WORKDIR /snapweb
+RUN git checkout vite-to-gatsby
+RUN bash -i -c 'nvm install && nvm use && yarn && yarn build'
+RUN cp -r public/* /usr/share/snapserver/snapweb
 
 WORKDIR /data
 WORKDIR /config
@@ -60,7 +58,6 @@ EXPOSE 1780
 COPY --from=builder /librespot/target/release/librespot /usr/local/bin/
 COPY --from=builder /usr/local/bin/shairport-sync /usr/local/bin/
 COPY ./config/snapserver.conf /etc
-COPY --from=builder /snapweb/dist/* /usr/share/snapserver/snapweb/
 COPY ./start.sh /
 RUN chmod +x /start.sh
 
