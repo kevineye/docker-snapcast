@@ -29,12 +29,12 @@ RUN cp /librespot/target/release/librespot /usr/local/bin/
 
 
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 # Install Python dependencies including pip and websockets
 RUN apt-get update
 RUN apt-get install -y python3-pip
-RUN python3 -m pip install websockets
+RUN python3 -m pip install websockets websocket-client
 RUN apt-get install -y libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev libpopt-dev libconfig-dev libssl-dev build-essential 
 COPY ./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb
 RUN apt-get install -y /snapserver_amd64.deb
@@ -54,5 +54,6 @@ COPY ./config/snapserver.conf /etc
 COPY ./snapweb/build/* /usr/share/snapserver/snapweb/
 COPY ./start.sh /
 RUN chmod +x /start.sh
+
 
 ENTRYPOINT [ "/start.sh" ]
