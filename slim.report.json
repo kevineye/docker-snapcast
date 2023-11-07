@@ -1,0 +1,386 @@
+{
+  "version": "1.1",
+  "engine": "darwin|Transformer|1.40.6|latest|latest",
+  "containerized": false,
+  "host_distro": {
+    "name": "",
+    "version": "",
+    "display_name": "other"
+  },
+  "type": "build",
+  "state": "done",
+  "target_reference": "daredoes/snapcast",
+  "system": {
+    "type": "",
+    "release": "",
+    "distro": {
+      "name": "",
+      "version": "",
+      "display_name": ""
+    }
+  },
+  "source_image": {
+    "identity": {
+      "id": "sha256:937bc1930968f7858ec2743168244b60327c8b5d32e3263a5011eb103d233552",
+      "tags": [
+        "latest"
+      ],
+      "names": [
+        "daredoes/snapcast:latest"
+      ]
+    },
+    "size": 1053344021,
+    "size_human": "1.1 GB",
+    "create_time": "2023-11-04T17:06:46Z",
+    "docker_version": "",
+    "architecture": "amd64",
+    "exposed_ports": [
+      "1704/tcp",
+      "1705/tcp",
+      "1780/tcp"
+    ],
+    "os": "linux",
+    "env_vars": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "container_entry": {
+      "exe_path": ""
+    }
+  },
+  "minified_image_size": 45234006,
+  "minified_image_size_human": "45 MB",
+  "minified_image": "daredoes/snapcast:beta",
+  "minified_image_has_data": true,
+  "minified_by": 23.286551737204086,
+  "artifact_location": "/opt/homebrew/bin/.slim-state/images/937bc1930968f7858ec2743168244b60327c8b5d32e3263a5011eb103d233552/artifacts",
+  "container_report_name": "creport.json",
+  "seccomp_profile_name": "daredoes-snapcast-seccomp.json",
+  "apparmor_profile_name": "daredoes-snapcast-apparmor-profile",
+  "image_stack": [
+    {
+      "is_top_image": true,
+      "id": "sha256:937bc1930968f7858ec2743168244b60327c8b5d32e3263a5011eb103d233552",
+      "full_name": "daredoes/snapcast:latest",
+      "repo_name": "daredoes/snapcast",
+      "version_tag": "latest",
+      "raw_tags": [
+        "daredoes/snapcast:latest"
+      ],
+      "create_time": "2023-11-04T17:06:46Z",
+      "new_size": 1053344021,
+      "new_size_human": "1.1 GB",
+      "instructions": [
+        {
+          "type": "ADD",
+          "time": "2023-11-01T00:21:11Z",
+          "is_nop": true,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 80551570,
+          "size_human": "81 MB",
+          "params": "file:5fb15e28ab9cd52a4c1371f9273d159579710f4efb955c1e6d76c0403e36967c in /",
+          "command_snippet": "ADD file:5fb15e28ab9cd52a4c1371f9273d1595797...",
+          "command_all": "ADD file:5fb15e28ab9cd52a4c1371f9273d159579710f4efb955c1e6d76c0403e36967c /",
+          "target": "/",
+          "source_type": "file",
+          "inst_set_time_bucket": "2023-10-31T17:15:00-07:00",
+          "inst_set_time_index": 0,
+          "inst_set_time_reverse_index": 2
+        },
+        {
+          "type": "CMD",
+          "time": "2023-11-01T00:21:12Z",
+          "is_nop": true,
+          "is_exec_form": true,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "[\"bash\"]\n",
+          "command_snippet": "CMD [\"bash\"]\n",
+          "command_all": "CMD [\"bash\"]\n",
+          "inst_set_time_bucket": "2023-10-31T17:15:00-07:00",
+          "inst_set_time_index": 0,
+          "inst_set_time_reverse_index": 2
+        },
+        {
+          "type": "COPY",
+          "time": "2023-11-04T16:32:31Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 1225784,
+          "size_human": "1.2 MB",
+          "params": "./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb",
+          "command_snippet": "COPY ./snapserver_0.27.0-1_amd64.deb /snapse...",
+          "command_all": "COPY ./snapserver_0.27.0-1_amd64.deb /snapserver_amd64.deb",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T09:30:00-07:00",
+          "inst_set_time_index": 1,
+          "inst_set_time_reverse_index": 1
+        },
+        {
+          "type": "RUN",
+          "time": "2023-11-04T17:06:35Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 945296116,
+          "size_human": "945 MB",
+          "command_snippet": "RUN apt-get update && \\\n\tapt-get install -y ...",
+          "command_all": "RUN apt-get update && \\\n\tapt-get install -y unzip python3-pip curl git nano libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev libpopt-dev libconfig-dev libssl-dev build-essential /snapserver_amd64.deb",
+          "system_commands": [
+            "apt-get update",
+            "apt-get install -y unzip python3-pip curl git nano libboost-all-dev libasound2-dev libpulse-dev libvorbisidec-dev libvorbis-dev libopus-dev libflac-dev libsoxr-dev alsa-utils libavahi-client-dev avahi-daemon libexpat1-dev libpopt-dev libconfig-dev libssl-dev build-essential /snapserver_amd64.deb"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "RUN",
+          "time": "2023-11-04T17:06:44Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 1385069,
+          "size_human": "1.4 MB",
+          "command_snippet": "RUN python3 -m pip install websockets websoc...",
+          "command_all": "RUN python3 -m pip install websockets websocket-client",
+          "system_commands": [
+            "python3 -m pip install websockets websocket-client"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "RUN",
+          "time": "2023-11-04T17:06:45Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 4330707,
+          "size_human": "4.3 MB",
+          "command_snippet": "RUN mkdir /tmp/snapweb && \\\n\trm -rf /usr/sha...",
+          "command_all": "RUN mkdir /tmp/snapweb && \\\n\trm -rf /usr/share/snapserver/snapweb && \\\n\tmkdir /usr/share/snapserver/snapweb && \\\n\tcd /tmp/snapweb && \\\n\tcurl -LJO https://github.com/daredoes/snapweb/releases/download/v0.4.1/dist.zip && \\\n\tunzip dist.zip -d /usr/share/snapserver/snapweb && \\\n\tcd / && \\\n\trm -rf /tmp/snapweb",
+          "system_commands": [
+            "mkdir /tmp/snapweb",
+            "rm -rf /usr/share/snapserver/snapweb",
+            "mkdir /usr/share/snapserver/snapweb",
+            "cd /tmp/snapweb",
+            "curl -LJO https://github.com/daredoes/snapweb/releases/download/v0.4.1/dist.zip",
+            "unzip dist.zip -d /usr/share/snapserver/snapweb",
+            "cd /",
+            "rm -rf /tmp/snapweb"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "WORKDIR",
+          "time": "2023-11-04T17:06:45Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "/data",
+          "command_snippet": "WORKDIR /data",
+          "command_all": "WORKDIR /data",
+          "system_commands": [
+            "mkdir -p /data"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "WORKDIR",
+          "time": "2023-11-04T17:06:45Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "/config",
+          "command_snippet": "WORKDIR /config",
+          "command_all": "WORKDIR /config",
+          "system_commands": [
+            "mkdir -p /config"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "EXPOSE",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "1704/tcp",
+          "command_snippet": "EXPOSE 1704/tcp",
+          "command_all": "EXPOSE 1704/tcp",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "EXPOSE",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "1705/tcp",
+          "command_snippet": "EXPOSE 1705/tcp",
+          "command_all": "EXPOSE 1705/tcp",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "EXPOSE",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 0,
+          "params": "1780/tcp",
+          "command_snippet": "EXPOSE 1780/tcp",
+          "command_all": "EXPOSE 1780/tcp",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "COPY",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 19714488,
+          "size_human": "20 MB",
+          "params": "/librespot/target/release/librespot /usr/local/bin/",
+          "command_snippet": "COPY /librespot/target/release/librespot /us...",
+          "command_all": "COPY /librespot/target/release/librespot /usr/local/bin/",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "COPY",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 830792,
+          "size_human": "831 kB",
+          "params": "/usr/local/bin/shairport-sync /usr/local/bin/",
+          "command_snippet": "COPY /usr/local/bin/shairport-sync /usr/loca...",
+          "command_all": "COPY /usr/local/bin/shairport-sync /usr/local/bin/",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "COPY",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 8821,
+          "size_human": "8.8 kB",
+          "params": "./config/snapserver.conf /etc",
+          "command_snippet": "COPY ./config/snapserver.conf /etc",
+          "command_all": "COPY ./config/snapserver.conf /etc",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "COPY",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 337,
+          "size_human": "337 B",
+          "params": "./start.sh /",
+          "command_snippet": "COPY ./start.sh /",
+          "command_all": "COPY ./start.sh /",
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "RUN",
+          "time": "2023-11-04T17:06:46Z",
+          "is_nop": false,
+          "local_image_exists": false,
+          "layer_index": 0,
+          "size": 337,
+          "size_human": "337 B",
+          "command_snippet": "RUN chmod +x /start.sh",
+          "command_all": "RUN chmod +x /start.sh",
+          "system_commands": [
+            "chmod +x /start.sh"
+          ],
+          "comment": "buildkit.dockerfile.v0",
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        },
+        {
+          "type": "ENTRYPOINT",
+          "time": "2023-11-04T17:06:46Z",
+          "is_last_instruction": true,
+          "is_nop": false,
+          "is_exec_form": true,
+          "local_image_exists": true,
+          "layer_index": 0,
+          "size": 0,
+          "params": "[\"/start.sh\"]\n",
+          "command_snippet": "ENTRYPOINT [\"/start.sh\"]\n",
+          "command_all": "ENTRYPOINT [\"/start.sh\"]\n",
+          "comment": "buildkit.dockerfile.v0",
+          "raw_tags": [
+            "daredoes/snapcast:latest"
+          ],
+          "is_buildkit_instruction": true,
+          "inst_set_time_bucket": "2023-11-04T10:00:00-07:00",
+          "inst_set_time_index": 2,
+          "inst_set_time_reverse_index": 0
+        }
+      ]
+    }
+  ],
+  "image_created": true,
+  "image_build_engine": "internal"
+}

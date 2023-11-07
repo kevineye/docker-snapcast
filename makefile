@@ -24,11 +24,13 @@ run:
 
 
 build:
-	docker build --platform=linux/amd64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE) . --build-arg SHAIRPORT_SYNC_BRANCH=development --build-arg NQPTP_BRANCH=development --build-arg SNAPCAST_BRANCH=master
+	docker build --platform=linux/amd64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME) . --build-arg SHAIRPORT_SYNC_BRANCH=development --build-arg NQPTP_BRANCH=development --build-arg SNAPCAST_BRANCH=master
 	# docker build --platform=linux/arm64 -t $(DOCKER_REPO)/$(DOCKER_IMAGE) .
 
+slim:
+	slim build --target $(DOCKER_REPO)/$(DOCKER_IMAGE) --tag $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME) --include-path /config --include-path /usr/share/snapserver/snapweb
 push:
-	docker tag $(DOCKER_REPO)/$(DOCKER_IMAGE) $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME)
+	# slim build --target $(DOCKER_REPO)/$(DOCKER_IMAGE) --tag $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME) --include-path /config --include-path /usr/share/snapserver/snapweb
 	docker push $(DOCKER_REPO)/$(DOCKER_IMAGE):$(TAG_NAME)
 
 .PHONY: build push 
