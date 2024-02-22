@@ -1,6 +1,6 @@
 DOCKER_IMAGE=snapcast
 DOCKER_REPO=daredoes
-TAG_NAME=latest
+TAG_NAME=airplay2
 
 host-run:
 	docker run -d --network host \
