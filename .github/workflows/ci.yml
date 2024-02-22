@@ -30,3 +30,8 @@ jobs:
           context: .
           push: true
           tags: daredoes/snapcast:${{github.ref}}
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            SHAIRPORT_SYNC_BRANCH=development
+            NQPTP_BRANCH=development
+            SNAPCAST_BRANCH=master

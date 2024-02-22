@@ -1,6 +1,6 @@
 DOCKER_IMAGE=snapcast
 DOCKER_REPO=daredoes
-TAG_NAME=beta
+TAG_NAME=latest
 
 host-run:
 	docker run -d --network host \
