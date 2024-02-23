@@ -12,7 +12,7 @@ fi
 
 # /usr/bin/dbus-daemon --system
 # avahi2dns &
-# nqptp &
+nqptp &
 # (cd /snapweb && nvm use && yarn && yarn build)
 # rc-service shairport-sync zap
 snapserver
